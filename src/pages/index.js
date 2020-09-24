@@ -1,7 +1,10 @@
 import React from "react"
 import { Link } from "gatsby"
 import Layout from '../components/Layout'
-import Sketch from "react-p5";
+// import Sketch from "react-p5";
+import loadable from "@loadable/component"
+
+const Sketch = loadable(() => import("react-p5"))
 
 const between = (x, min, max) =>  x >= min && x <= max
 
