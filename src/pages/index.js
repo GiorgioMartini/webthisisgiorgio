@@ -2,9 +2,11 @@ import React from "react"
 import { Link } from "gatsby"
 import Layout from '../components/Layout'
 // import Sketch from "react-p5";
-import loadable from "@loadable/component"
+import Loadable from "@loadable/component";
 
-const Sketch = loadable(() => import("react-p5"))
+// const Sketch = loadable(() => import("react-p5"))
+
+const P5Wrapper = Loadable(() => import('react-p5-wrapper'));
 
 const between = (x, min, max) =>  x >= min && x <= max
 
@@ -13,7 +15,8 @@ function isOverGridPoint (mouseX, mouseY, x, y) {
     ? true
     : false
 }
-const Background = (props) => {
+
+const Sketch = (p5) => {
   let canvas
   let cols = 20
   let rows = 10
@@ -21,7 +24,6 @@ const Background = (props) => {
   const windowResized = (p5) => p5.resizeCanvas(p5.windowWidth, p5.windowHeight)
   const lineThresh = 30
   let color = "#2b1b69"
-  // let color = "#af3242"
 
   function Spot(p5, x, y) {
     let _x = x
@@ -71,9 +73,9 @@ const Background = (props) => {
     }
   }
 
-  const setup = (p5, canvasParentRef) => {
+  p5.setup = (canvasParentRef) => {
     // p5.pixelDensity(1);
-    canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight /*, p5.WEBGL*/).parent(canvasParentRef)
+    canvas = p5.createCanvas(p5.windowWidth, p5.windowHeight /*, p5.WEBGL*/)
     const colWidth = (p5.width / cols)
     const colHeight = (p5.height / rows)
     canvas.position(0, 0)
@@ -86,7 +88,7 @@ const Background = (props) => {
     }
   }
 
-  const draw = (p5) => {
+  p5.draw = () => {
     p5.background(0)
     // p5.translate(-p5.width / 2, -p5.height / 2,0);
     p5.strokeWeight(3)
@@ -106,13 +108,13 @@ const Background = (props) => {
 
     })
   };
-  return <Sketch windowResized={windowResized} setup={setup} draw={draw} />
+  // return <Sketch windowResized={windowResized} setup={setup} draw={draw} />
 }
 
 const IndexPage = () => {
   return (
     <div>
-      <Background />
+      <P5Wrapper sketch={Sketch} />
       <Layout>
         <div className="max-w-lg">
           <p className="mt-16 mb-4 text-6xl">Hey!</p>
